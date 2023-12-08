@@ -1,0 +1,18 @@
+node_modules
+.git
+.gitignore
+
+# Ignore build artifacts
+dist
+
+# Ignore log files
+*.log
+
+# Ignore environment files
+.env
+
+# Ignore any other temporary or generated files
+*.tmp
+*.bak
+*.swp
+.DS_Store
