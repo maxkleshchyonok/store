@@ -2,7 +2,8 @@ import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/commo
 import { PrismaService } from 'prisma/prisma.service';
 import { Request } from 'express';
 import * as bcrypt from 'bcrypt';
-import { CreateUserDto } from './dto/createUserDto';
+import { CreateUserDto } from './common/dto/createUserDto';
+import { Role } from './common/constants/role.enum';
 
 interface CustomRequest extends Request {
     user: {
@@ -46,13 +47,16 @@ export class UserService {
     async create(createUserDto: CreateUserDto) {
         const { email, password, name } = createUserDto;
 
+        const roles = [Role.USER];
+
         const hashedPassword = await this.hashPassword(password);
 
         const user = await this.prisma.user.create({
             data: {
                 name,
                 email,
-                hashedPassword
+                hashedPassword,
+                roles
             }
         });
 
