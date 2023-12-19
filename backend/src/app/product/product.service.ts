@@ -36,7 +36,8 @@ export class ProductService {
   }
 
   async update(id: number, data: Pick<Product, 'amount'>) {
-    return await this.productRepo.update(id, data);
+    const amount = data.amount as number;
+    return await this.productRepo.update(id, amount);
   }
 
   async remove(id: number) {

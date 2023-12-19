@@ -26,7 +26,7 @@ export class CreateProductForm {
     public images: string[]
 
     static from(form?: CreateProductForm) {
-        const it = new CreateProductForm;
+        const it = new CreateProductForm();
         it.name = form?.name;
         it.description = form?.description;
         it.price = form?.price;

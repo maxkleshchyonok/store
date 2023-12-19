@@ -7,8 +7,8 @@ export class UserController {
   constructor(private readonly usersService: UserService) { }
 
   @Get(':id')
-  getMyUser(@Param('id') id: string, @Req() req) {
-    return this.usersService.getMyUser(id, req);
+  getMyUser(@Param('id') id: string) {
+    return this.usersService.getMyUser(id);
   }
 
   @UseGuards(JwtGuard)  

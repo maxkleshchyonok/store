@@ -1,55 +1,45 @@
 import { Injectable } from '@nestjs/common';
-import { CreateOrderItemDto } from './dto/create-order-item.dto';
-import { UpdateOrderItemDto } from './dto/update-order-item.dto';
 import { PrismaService } from 'src/libs/prisma/prisma.service';
+import { OrderItemForm } from './domain/order-item.form';
+import { Order_Item } from '@prisma/client';
+import { OrderItemRepo } from 'src/domain/repos/order-item.repo';
+import { UpdateOrderItemForm } from './domain/update-order-item.form';
 
 @Injectable()
 export class OrderItemService {
 
-  constructor(private prisma: PrismaService) { }
+  constructor(
+    private prisma: PrismaService,
+    private orderItemRepo: OrderItemRepo
+  ) { }
 
-  async create(createOrderItemDto: CreateOrderItemDto) {
-    const { orderId, productId, quantity, price } = createOrderItemDto;
+  async create(id: number, data: Pick<Order_Item, 'productId' | 'quantity' | 'price'>) {
 
-    const orderItem = await this.prisma.order_Item.create({
-      data: {
-        orderId,
-        productId,
-        quantity,
-        price
-      }
-    });
-    return orderItem;
+    const { productId, quantity, price } = data;
+
+    const orderItemData = {
+      productId,
+      quantity,
+      price
+    }
+
+    return await this.orderItemRepo.create(id, orderItemData);
   }
 
-  findAll() {
-    return `This action returns all orderItem`;
+  async findAll() {
+    return await this.orderItemRepo.findAll();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} orderItem`;
+  async findOne(id: number) {
+    return await this.orderItemRepo.findOne(id);
   }
 
-  update(id: number, updateOrderItemDto: UpdateOrderItemDto) {
-    return `This action updates a #${id} orderItem`;
+  // async update(id: number, updateOrderItemForm: UpdateOrderItemForm) {
+  //   return await this.orderItemRepo.update(id, updateOrderItemForm);
+  // }
+
+  async remove(id: number) {
+    return await this.orderItemRepo.remove(id);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} orderItem`;
-  }
-
-  async checkOrder(orderId: number) {
-    const order = await this.prisma.order.findUnique({
-      where: {
-        id: orderId,
-      }
-    });
-    // if (!order) {
-    //   const newOrder = await this.prisma.order.create({
-    //     data: {
-
-    //     }
-    //   });
-    // }
-  }
 }

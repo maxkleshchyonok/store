@@ -19,19 +19,19 @@ export class ProductRepo {
     }
 
     async findOne(id: number) {
-        return this.prisma.product.findUnique({ where: { id: id } });
+        return this.prisma.product.findUnique({ where: { id } });
     }
 
-    async update(id: number, data: Pick<Product, 'amount'>) {
+    async update(id: number, amount: number) {
         return this.prisma.product.update({
-            where: {id},
+            where: { id },
             data: {
-                amount: data.amount
+                amount: amount
             }
         });
     }
 
     async remove(id: number) {
-        return this.prisma.product.delete({ where: { id: id } });
+        return this.prisma.product.delete({ where: { id } });
     }
 }

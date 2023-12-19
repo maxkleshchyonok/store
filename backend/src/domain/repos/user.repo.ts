@@ -3,7 +3,7 @@ import { Role } from 'src/enums/role.enum';
 import { PrismaService } from 'src/libs/prisma/prisma.service';
 import { CreateUserDto } from '../dtos/createUserDto';
 import * as bcrypt from 'bcrypt';
-import { User } from '@prisma/client';
+import { Order, User } from '@prisma/client';
 
 interface CustomRequest extends Request {
     user: {
@@ -16,20 +16,50 @@ interface CustomRequest extends Request {
 export class UserRepo {
     constructor(private prisma: PrismaService) { }
 
-    async getMyUser(id: string, req: CustomRequest) {
-        const user = await this.prisma.user.findUnique({ where: { id } });
+    // async getMyUser(id: string, req: CustomRequest) {
+    //     const user = await this.prisma.user.findUnique({
+    //         where: { id },
+    //         include: {
+    //             orders: {
+    //                 include: {
+    //                     items: true
+    //                 }
+    //             }
+    //         }
+    //     },
+    //     );
+
+    //     if (!user) {
+    //         throw new NotFoundException();
+    //     }
+
+    //     const decodedUser = req.user as { id: string, email: string };
+
+    //     if (user.id !== decodedUser.id) {
+    //         throw new ForbiddenException();
+    //     }
+
+    //     delete user.hashedPassword;
+
+    //     return { user };
+    // }
+
+    async getMyUser(id: string) {
+        const user = await this.prisma.user.findUnique({
+            where: { id },
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                roles: true,
+                orders: true
+            }
+        },
+        );
 
         if (!user) {
             throw new NotFoundException();
         }
-
-        const decodedUser = req.user as { id: string, email: string };
-
-        if (user.id !== decodedUser.id) {
-            throw new ForbiddenException();
-        }
-
-        delete user.hashedPassword;
 
         return { user };
     }
@@ -45,7 +75,7 @@ export class UserRepo {
     }
 
     async create(userData: Pick<User, 'name' | 'email' | 'hashedPassword' | 'roles'>) {
-       
+
 
         const user = await this.prisma.user.create({
             data: userData,

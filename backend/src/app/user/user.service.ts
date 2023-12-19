@@ -14,8 +14,8 @@ export class UserService {
         private userRepo: UserRepo
          ) { }
 
-    async getMyUser(id: string, req) {
-        return await this.userRepo.getMyUser(id, req);
+    async getMyUser(id: string) {
+        return await this.userRepo.getMyUser(id);
     }
 
     async getUsers() {
