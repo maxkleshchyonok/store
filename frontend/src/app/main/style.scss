@@ -1,0 +1,16 @@
+.products {
+    padding: 2% 2% 0 2%;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-column-gap: 3%;
+    grid-row-gap: 3%;
+}
+
+@media screen and (max-width: 480px) {
+    .products{
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        gap: 1vh;
+    }
+  }

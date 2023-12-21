@@ -27,7 +27,9 @@ export class AuthService {
         };
 
         return {
-            ...user,
+            id: user.id,
+            name: user.name,
+            email: user.email,
             accessToken: this.jwtService.sign(payload),
             refreshToken: this.jwtService.sign(payload, { expiresIn: '7d' })
         }
@@ -36,6 +38,8 @@ export class AuthService {
     async create(data: SignupForm) {
 
         const { name, email, password } = data;
+
+        //const isUserExist = this.userRepo.findOneWithUserName();
 
         const roles = [Role.USER];
 
