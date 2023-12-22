@@ -1,115 +1,53 @@
-import React from 'react'
-import ProductCard from '../card/Card';
+import React, { useEffect, useState } from 'react'
+import ProductCard from '../product/ProductCard';
 import './style.scss'
 import { Navbar } from '../navbar/Navbar';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../store';
+import { getProduct } from '../product/store/product.action';
+import { Product } from '../product/types/types';
 
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-  description: string;
-  imageUrl: string;
-}
+const Main = () => {
 
-const products: Product[] = [
-  {
-    id: 1,
-    name: 'Product 1',
-    price: 9.99,
-    description: 'Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica',
-    imageUrl: 'https://images.ctfassets.net/hrltx12pl8hq/28ECAQiPJZ78hxatLTa7Ts/2f695d869736ae3b0de3e56ceaca3958/free-nature-images.jpg?fit=fill&w=1200&h=630',
-  },
-  {
-    id: 2,
-    name: 'Product 2',
-    description: 'Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica',
-    price: 19.99,
-    imageUrl: 'https://images.ctfassets.net/hrltx12pl8hq/28ECAQiPJZ78hxatLTa7Ts/2f695d869736ae3b0de3e56ceaca3958/free-nature-images.jpg?fit=fill&w=1200&h=630',
-  },
-  {
-    id: 3,
-    name: 'Product 3',
-    price: 14.99,
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    imageUrl: 'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg',
-  },
-  {
-    id: 4,
-    name: 'Product 4',
-    price: 24.99,
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    imageUrl: 'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg',
-  },
-  {
-    id: 5,
-    name: 'Product 5',
-    price: 7.99,
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    imageUrl: 'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg',
-  },
-  {
-    id: 6,
-    name: 'Product 6',
-    price: 12.99,
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    imageUrl: 'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg',
-  },
-  {
-    id: 7,
-    name: 'Product 7',
-    price: 29.99,
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    imageUrl: 'https://www.imagesfromtexas.com/images/xl/Late-March-Bluebonnet-Sunset-331-7.jpg',
-  },
-  {
-    id: 8,
-    name: 'Product 8',
-    price: 17.99,
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    imageUrl: 'https://www.imagesfromtexas.com/images/xl/Late-March-Bluebonnet-Sunset-331-7.jpg',
-  },
-  {
-    id: 9,
-    name: 'Product 9',
-    price: 10.99,
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    imageUrl: 'https://www.imagesfromtexas.com/images/xl/Late-March-Bluebonnet-Sunset-331-7.jpg',
-  },
-  {
-    id: 10,
-    name: 'Product 10',
-    price: 49.99,
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    imageUrl: 'https://imgd.aeplcdn.com/1056x594/n/cw/ec/44686/activa-6g-right-front-three-quarter.jpeg?q=80',
-  },
-  {
-    id: 11,
-    name: 'Product 11',
-    price: 79.99,
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    imageUrl: 'https://imgd.aeplcdn.com/1056x594/n/cw/ec/44686/activa-6g-right-front-three-quarter.jpeg?q=80',
-  },
-];
+  const [products, setProducts] = useState([]);
 
-export const Main = () => {
+  const dispatch = useDispatch();
+  const { product, loading, error } = useSelector(
+    (state: RootState) => state.product
+  )
+
+  useEffect(() => {
+    const getProducts = async () => {
+      try {
+        const res = await dispatch<any>(getProduct());
+        setProducts(res.payload);
+      } catch (error) {
+        throw new Error('Error in loading products')
+      }
+    }
+    getProducts();
+  }, []);
+
+
+
   return (
     <div>
       <Navbar />
       <h2>Main</h2>
       <div className='products'>
-        {products.map((product) => (
+        {products.map((product: Product) => (
           <ProductCard
             productId={product.id}
             key={product.id}
             name={product.name}
             price={product.price}
             description={product.description}
-            imageUrl={product.imageUrl}
+            imageUrl={product.images[0]}
           />
         ))}
-        </div>
       </div>
-      )
+    </div>
+  )
 }
 
 export default Main;

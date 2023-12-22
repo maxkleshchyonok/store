@@ -1,5 +1,5 @@
 export interface ProductCardProps {
-    productId: number
+    productId: string
     name: string;
     price: number;
     description: string;
