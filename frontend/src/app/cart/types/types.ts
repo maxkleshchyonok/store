@@ -1,14 +1,16 @@
-export interface CartItem {
-    id: string;
-    price: number;
-    quantity: number;
-    totalPrice: number;
-    name: string;
-    cover: string;
+export interface Cart {
+    userId: string | null;
+    items: OrderItem;
 }
 
-export interface CartState {
-    itemsList: CartItem[];
-    totalQuantity: number;
-    finalPrice: number;
+export type OrderItem = {
+    productId: number;
+    quantity: number;
+    price: number;
+}
+
+export type CartState = {
+    cart: Cart | null;
+    loading: boolean;
+    error: string | null;
 }

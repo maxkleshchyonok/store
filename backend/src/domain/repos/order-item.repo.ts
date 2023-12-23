@@ -6,7 +6,7 @@ import { PrismaService } from "src/libs/prisma/prisma.service";
 export class OrderItemRepo {
     constructor(private prisma: PrismaService) { }
 
-    async create(orderId: number , orderItemData: Pick<Order_Item, 'productId' | 'quantity' | 'price'>) {
+    async create(orderId: number, orderItemData: Pick<Order_Item, 'productId' | 'quantity' | 'price'>) {
         const orderItem = await this.prisma.order_Item.create({
             data: {
                 orderId,
@@ -23,15 +23,19 @@ export class OrderItemRepo {
     }
 
     async findAll() {
-        return this.prisma.order_Item.findMany();
+        return await this.prisma.order_Item.findMany();
     }
 
     async findOne(id: number) {
-        return this.prisma.order_Item.findUnique({ where: { id } });
+        return await this.prisma.order_Item.findUnique({ where: { id } });
+    }
+
+    async findByOrder(id: number) {
+        return await this.prisma.order_Item.findMany({ where: { orderId: id } });
     }
 
     async update(id: number, data: Partial<Pick<Order_Item, 'productId' | 'price' | 'quantity'>>) {
-        return this.prisma.order_Item.update({
+        return await this.prisma.order_Item.update({
             where: { id },
             data: {
                 ...data
@@ -40,7 +44,7 @@ export class OrderItemRepo {
     }
 
     async remove(id: number) {
-        return this.prisma.order_Item.delete({ where: { id } });
+        return await this.prisma.order_Item.delete({ where: { id } });
     }
 
 }

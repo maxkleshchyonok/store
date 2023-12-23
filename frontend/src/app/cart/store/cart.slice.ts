@@ -1,36 +1,58 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { CartState, CartItem } from "../types/types";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Cart, CartState } from '../types/types';
+import { createOrder, getOrder } from './cart.actions';
 
 const initialState: CartState = {
-  itemsList: [],
-  totalQuantity: 0,
-  finalPrice: 0,
+  cart: null,
+  loading: false,
+  error: null,
 };
 
 export const cartSlice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
-    addToCart(state, action: PayloadAction<CartItem>) {
-      const newItem = action.payload;
-      const existItem = state.itemsList.find((item) => item.id === newItem.id);
-      if (existItem) {
-        existItem.quantity++;
-        existItem.totalPrice += newItem.price;
-      } else {
-        state.itemsList.push({
-          id: newItem.id,
-          price: newItem.price,
-          quantity: 1,
-          totalPrice: newItem.price,
-          name: newItem.name,
-          cover: newItem.cover,
-        });
-        state.totalQuantity++;
-      }
+    setCart: (state, action: PayloadAction<Cart>) => {
+      state.cart = action.payload;
+    },
+    setLoading: (state, action: PayloadAction<boolean>) => {
+      state.loading = action.payload;
+    },
+    setError: (state, action: PayloadAction<string | null>) => {
+      state.error = action.payload;
     }
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(createOrder.pending, (state, action) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(createOrder.fulfilled, (state, action ) => {
+        state.cart = action.payload
+        state.loading = false;
+      })
+      .addCase(createOrder.rejected, (state, action) => {
+        state.cart = null;
+        state.loading = false;
+        state.error = action.error.message || null;
+      })
+      .addCase(getOrder.pending, (state, action) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getOrder.fulfilled, (state, action ) => {
+        state.cart = action.payload
+        state.loading = false;
+      })
+      .addCase(getOrder.rejected, (state, action) => {
+        state.cart = null;
+        state.loading = false;
+        state.error = action.error.message || null;
+      });
   },
 });
 
-export const { addToCart } = cartSlice.actions;
+export const { setCart, setLoading, setError } = cartSlice.actions;
+
 export const cartReducer = cartSlice.reducer;

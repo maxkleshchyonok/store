@@ -9,9 +9,6 @@ export class CreateOrderForm {
     @IsString()
     public userId: string
 
-    @IsNumber()
-    public totalPrice: number
-
     @IsArray()
     @ArrayNotEmpty()
     items: OrderItemForm
@@ -22,7 +19,6 @@ export class CreateOrderForm {
         }
         const it = new CreateOrderForm();
         it.userId = form.userId;
-        it.totalPrice = form.totalPrice;
         it.items = form.items;
         return it;
     }

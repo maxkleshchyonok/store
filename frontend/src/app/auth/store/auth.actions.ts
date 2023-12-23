@@ -14,6 +14,7 @@ export const loginUser = createAsyncThunk<User, CreateUserDto>('loginUser', asyn
     try {
         const response = await axios.post('http://localhost:3001/auth/login', data);
         sessionStorage.setItem('access_token', response.data.accessToken);
+        sessionStorage.setItem('userId', response.data.id);
         return response.data;
     } catch (error) {
         return rejectWithValue('SignIn failed')

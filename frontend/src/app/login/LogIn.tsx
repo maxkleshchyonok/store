@@ -32,7 +32,6 @@ export default function SignIn() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    //api call + in state
 
     const loginData: CreateUserDto = {
       username: data.get('email') as string,

@@ -1,33 +1,42 @@
 import React, { useState } from 'react';
 import { Button, Card, CardActions, CardContent, CardMedia, TextField, Typography, makeStyles } from '@mui/material';
 import { ProductCardProps } from './types/card.type';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../store';
+import { Cart } from '../cart/types/types';
+import { createOrder } from '../cart/store/cart.actions';
 
 
 const ProductCard: React.FC<ProductCardProps> = ({ productId, imageUrl, description, price, name }) => {
 
-  const [quantity, setQuantity] = useState(1);
-  const [totalPrice, setTotalPrice] = useState(0);
+  const dispatch = useDispatch();
+  const { cart, loading, error } = useSelector(
+    (state: RootState) => state.cart
+  );
 
-  const handleByClick = () => {
-    const data = {
-      userId: localStorage.getItem('userId'),
-      totalPrice: 0,
+  const [quantity, setQuantity] = useState(1);
+  const [totalPrice, setTotalPrice] = useState(price);
+
+  const handleByClick = async () => {
+    const data: Cart = {
+      userId: sessionStorage.getItem('userId'),
       items: {
-        productId: productId,
-        quantity: 0,
-        price: 0
+        productId: +productId,
+        quantity: quantity,
+        price: totalPrice
       }
     }
+    await dispatch<any>(createOrder(data))
   }
 
   const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const parsedValue = parseInt(event.target.value, 10);
     setQuantity(parsedValue);
+    setTotalPrice(parsedValue * price);
   };
 
   return (
-    <Card sx={{ maxWidth: 345, paddingBottom: '25%' }}>
+    <Card sx={{ maxWidth: 345, minHeight: '52vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
       <CardMedia
         sx={{ height: 140 }}
         image={imageUrl}
@@ -46,12 +55,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ productId, imageUrl, descript
       </CardContent>
       <CardActions>
         <TextField
-        type='number'
-        defaultValue={1}
-        InputProps={{inputProps: {min: 1, max: 100, step: 1}}}
-        onChange={handleQuantityChange}
+          type='number'
+          defaultValue={1}
+          InputProps={{ inputProps: { min: 1, max: 100, step: 1 } }}
+          onChange={handleQuantityChange}
         ></TextField>
-        <Button variant='contained'>Buy</Button>
+        <Button onClick={handleByClick} variant='contained'>Buy</Button>
       </CardActions>
     </Card>
   );
