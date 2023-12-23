@@ -3,7 +3,7 @@ import { Button, Card, CardActions, CardContent, CardMedia, TextField, Typograph
 import { ProductCardProps } from './types/card.type';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import { Cart } from '../cart/types/types';
+import { CartItem } from '../cart/types/types';
 import { createOrder } from '../cart/store/cart.actions';
 
 
@@ -18,7 +18,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ productId, imageUrl, descript
   const [totalPrice, setTotalPrice] = useState(price);
 
   const handleByClick = async () => {
-    const data: Cart = {
+    const data: CartItem = {
       userId: sessionStorage.getItem('userId'),
       items: {
         productId: +productId,

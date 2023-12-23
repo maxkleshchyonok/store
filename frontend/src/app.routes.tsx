@@ -1,6 +1,6 @@
 import React, { FC, Suspense } from "react";
 import { Navigate, Routes, Route } from "react-router-dom";
-import { Cart } from "./app/cart/Cart";
+import { CartPage } from "./app/cart/Cart";
 import Main from "./app/main/Main";
 import AuthRoutes from "./app/auth/auth.routes";
 
@@ -36,7 +36,7 @@ export const AppRoutes = () => {
             <Route path={"/auth/*"} element={<PublicRoute element={AuthRoutes} />} />
 
             {/* PRIVATE */}
-            <Route path={"/cart"} element={<PrivateRoute element={Cart} />} />
+            <Route path={"/cart"} element={<PrivateRoute element={CartPage} />} />
 
             {/* DEFAULT */}
             <Route path='*' element={<Navigate to="/store" />} />

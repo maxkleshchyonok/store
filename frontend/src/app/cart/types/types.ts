@@ -1,16 +1,33 @@
 export interface Cart {
     userId: string | null;
-    items: OrderItem;
+    items: OrderItem[];
 }
 
 export type OrderItem = {
-    productId: number;
+    productId: number | null;
     quantity: number;
     price: number;
+    id?: number;
+    orderId?: number;
+    createdAt?: string;
+    updatedAt?: string;
 }
 
 export type CartState = {
     cart: Cart | null;
     loading: boolean;
     error: string | null;
+}
+
+export interface CartItem{
+    userId: string | null;
+    items: OrderItem;
+}
+
+export type CartPageItem = {
+    name: string;
+    description: string;
+    images: string[];
+    quantity: number;
+    price: number;
 }

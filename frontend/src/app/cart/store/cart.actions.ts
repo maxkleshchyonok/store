@@ -1,8 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { Cart } from "../types/types";
+import { Cart, CartItem, OrderItem } from "../types/types";
 
-export const createOrder = createAsyncThunk<Cart, Cart>('createOrder', async (data, { rejectWithValue }) => {
+export const createOrder = createAsyncThunk<Cart, CartItem>('createOrder', async (data, { rejectWithValue }) => {
     try {
         const response = await axios.post('http://localhost:3001/order', data);
         return response.data;
@@ -13,9 +13,18 @@ export const createOrder = createAsyncThunk<Cart, Cart>('createOrder', async (da
 
 export const getOrder = createAsyncThunk('getOrder', async (_, {rejectWithValue}) => {
     try {
-        const response = await axios.get('http://localhost:3001/order/e82c32b7-6979-48fe-90f5-646dc0f86ecb');
+        const response = await axios.get(`http://localhost:3001/order/${sessionStorage.getItem('userId')}`);
         return response.data;
     } catch (error) {
         return rejectWithValue('Error with getting order')
     }
 });
+
+export const getOrderProduct = createAsyncThunk('getProduct', async (productId: number | null, {rejectWithValue}) => {
+    try{
+        const response = await axios.get(`http://localhost:3001/product/${productId}`);
+        return response.data;
+    } catch (error) {
+
+    }
+})
