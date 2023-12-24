@@ -16,7 +16,7 @@ export const getOrder = createAsyncThunk('getOrder', async (_, {rejectWithValue}
         const response = await axios.get(`http://localhost:3001/order/${sessionStorage.getItem('userId')}`);
         return response.data;
     } catch (error) {
-        return rejectWithValue('Error with getting order')
+        return rejectWithValue('Error with getting order');
     }
 });
 
@@ -25,6 +25,15 @@ export const getOrderProduct = createAsyncThunk('getProduct', async (productId: 
         const response = await axios.get(`http://localhost:3001/product/${productId}`);
         return response.data;
     } catch (error) {
+        return rejectWithValue('Error with order item');
+    }
+})
 
+export const confirmOrder = createAsyncThunk('confirmOrder', async (orderId: number, {rejectWithValue}) => {
+    try {
+        const response = await axios.patch(`http://localhost:3001/order/status/${orderId}`);
+        return response.data;
+    } catch (error) {
+        return rejectWithValue('Error with updating order');
     }
 })

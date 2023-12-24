@@ -6,7 +6,7 @@ import CardContent from '@mui/joy/CardContent';
 import IconButton from '@mui/joy/IconButton';
 import Typography from '@mui/joy/Typography';
 import BookmarkAdd from '@mui/icons-material/BookmarkAddOutlined';
-import { CartPageItem } from '../cart/types/types';
+import { CartPageItem } from '../../app/cart/types/types';
 
 export default function OrderItemComponent ({name, description, images, quantity, price}: CartPageItem) {
   return (

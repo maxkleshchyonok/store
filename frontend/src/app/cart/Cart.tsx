@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import { Navbar } from '../navbar/Navbar'
+import { Navbar } from '../../components/navbar/Navbar'
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import { Cart, CartPageItem, OrderItem } from './types/types';
-import { getOrder, getOrderProduct } from './store/cart.actions';
-import OrderItemComponent from '../orderItem/OrderItem';
+import { Cart, CartPageItem, OrderFromResponse, OrderItem } from './types/types';
+import { confirmOrder, getOrder, getOrderProduct } from './store/cart.actions';
+import OrderItemComponent from '../../components/orderItem/OrderItem';
 import './style.scss'
-import { Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 
 
 export const CartPage = () => {
   const [products, setProducts] = useState<CartPageItem[]>([]);
+  const [order, setOrder] = useState<OrderFromResponse>();
 
   const dispatch = useDispatch();
   const { cart, loading, error } = useSelector(
@@ -21,6 +22,10 @@ export const CartPage = () => {
     const receiveOrder = async () => {
       try {
         const order = await dispatch<any>(getOrder());
+        if (!order) {
+          return;
+        }
+        setOrder(order.payload);
         const orderItems: CartPageItem[] = [];
         await Promise.all(
           order.payload.items.map(async (item: OrderItem) => {
@@ -37,18 +42,28 @@ export const CartPage = () => {
         );
         setProducts(orderItems);
       } catch (error) {
-        throw new Error('Error in loading cart');
+        console.log(error)
       }
     };
     receiveOrder();
   }, []);
 
 
+  const handleSubmit = async () => {
+    if (order) {
+      console.log(order)
+      await dispatch<any>(confirmOrder(order.id)).then(() => {
+        alert('You order successfully confirmed. Reload the page');
+      });
+    }
+  }
+
+
   return (
     <div>
       <Navbar />
-      <Typography variant="h2" component="h2" sx={{padding: '3% 0 0 3%'}}>
-        Your cart: 
+      <Typography variant="h2" component="h2" sx={{ padding: '3% 0 0 3%' }}>
+        Your cart:
       </Typography>
       <div className='content'>
         {products.map(el => {
@@ -63,6 +78,16 @@ export const CartPage = () => {
           )
         })}
       </div>
+      {products.length > 0 && (
+        <Button
+          variant="contained"
+          color="success"
+          sx={{ minWidth: '10vw', height: '8vh', marginLeft: '4%' }}
+          onClick={handleSubmit}
+        >
+          Confirm order
+        </Button>
+      )}
     </div>
   )
 }

@@ -31,3 +31,14 @@ export type CartPageItem = {
     quantity: number;
     price: number;
 }
+
+export type OrderFromResponse = {
+    id: number;
+    createdAt: string;
+    updatedAt: string;
+    totalPrice: number;
+    userId: string;
+    status: string;
+    items: OrderItem[]
+}
+

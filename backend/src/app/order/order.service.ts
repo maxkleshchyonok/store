@@ -77,6 +77,11 @@ export class OrderService {
     return 'Order updated!'
   }
 
+  async updateStatus(id: number) {
+    const statusCompleted = OrderStatus.COMPLETED;
+    return await this.orderRepo.updateOrderById(id, statusCompleted);
+  }
+
   async createNewOrderItem(orderId: number, totalPrice: number, item: Pick<Order_Item, 'productId' | 'quantity' | 'price'>) {
     const dbItem = await this.getProduct(item.productId);
     const isOk = this.checkAmountAndPrice(item.quantity, item.price, dbItem);

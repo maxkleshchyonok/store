@@ -28,6 +28,11 @@ export class OrderController {
     return this.orderService.update(+id, updateOrderForm, updateOrderForm.itemId, updateOrderForm.item);
   }
 
+  @Patch('status/:id')
+  updateStatus(@Param('id') id: string) {
+    return this.orderService.updateStatus(+id);
+  }
+
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.orderService.remove(+id);

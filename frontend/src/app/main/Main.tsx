@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import ProductCard from '../product/ProductCard';
 import './style.scss'
-import { Navbar } from '../navbar/Navbar';
+import { Navbar } from '../../components/navbar/Navbar';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { getProduct } from '../product/store/product.action';
 import { Product } from '../product/types/types';
+import { Typography } from '@mui/material';
 
 const Main = () => {
 
@@ -33,7 +34,9 @@ const Main = () => {
   return (
     <div>
       <Navbar />
-      <h2>Main</h2>
+      <Typography variant="h2" component="h2" sx={{ padding: '3% 0 0 3%' }}>
+        Main Catalog:
+      </Typography>
       <div className='products'>
         {products.map((product: Product) => (
           <ProductCard

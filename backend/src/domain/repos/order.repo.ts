@@ -29,17 +29,8 @@ export class OrderRepo {
         });
     }
 
-    // async findOne(userId: string) {
-    //     return await this.prisma.order.findUnique({
-    //         where: {
-    //             userId: userId,
-    //             status: OrderStatus.ACTIVE
-    //         }
-    //     });
-    // }
-
     async findOne(userId: string) {
-        return await this.prisma.order.findFirst({
+        const order = await this.prisma.order.findFirst({
             where: {
                 userId: userId,
                 status: OrderStatus.ACTIVE
@@ -48,14 +39,26 @@ export class OrderRepo {
                 items: true
             }
         })
+        if (!order) {
+            return false;
+        }
+        return order;
     }
 
-    async findOrderByUserId(userId: string) {
-        return await this.prisma.order.findUnique
+    async updateOrderById(id: number, status: string) {
+        try {
+            return await this.prisma.order.update({
+                where: {id},
+                data: {
+                    status: status
+                }
+            });
+        } catch (error) {
+            throw new Error('Error with updating status')
+        }
     }
 
     async update(id: number, updateData: Partial<Pick<Order, 'totalPrice' | 'status'>>) {
-        console.log(id)
         try {
             const updatedOrder = await this.prisma.order.update({
                 where: { id },

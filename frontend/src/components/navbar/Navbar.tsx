@@ -9,7 +9,7 @@ export const Navbar = () => {
     return (
         <AppBar position="static" sx={{background: 'rgb(194, 241, 106)'}}>
             <Toolbar sx={{ justifyContent: 'space-between' }}>
-                <Typography onClick={() => navigate('/')} sx={{color: 'purple'}} variant="h6">Online Shop</Typography>
+                <Typography onClick={() => navigate('/')} sx={{color: 'purple', cursor: 'pointer'}} variant="h6">Online Shop</Typography>
                 <Toolbar sx={{justifyContent: 'flex-end'}}>
                     <IconButton onClick={() => navigate('/cart') } sx={{color: 'purple'}} color="inherit">
                         <ShoppingCart />
