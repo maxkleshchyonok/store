@@ -1,4 +1,6 @@
-import * as React from 'react';
+import React from 'react';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -18,29 +20,31 @@ import { registerUser } from '../auth/store/auth.actions';
 
 const defaultTheme = createTheme();
 
-export default function SignUp() {
+// Define the validation schema
+const validationSchema = Yup.object().shape({
+  username: Yup.string().required('Username is required'),
+  email: Yup.string().email('Invalid email').required('Email is required'),
+  password: Yup.string().required('Password is required'),
+});
 
+export default function SignUp() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  
+
   const { user, isAuthenticated, loading, error } = useSelector(
     (state: RootState) => state.auth
   );
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-
+  const handleSubmit = async (values: RegisterUserDto) => {
     const registerData: RegisterUserDto = {
-      name: data.get('Username') as string,
-      email: data.get('Email') as string,
-      password: data.get('Password') as string,
-    }
+      name: values.name,
+      email: values.email,
+      password: values.password,
+    };
 
     await dispatch<any>(registerUser(registerData)).then(() => {
-      navigate('/auth/login')
-    })
-
+      navigate('/auth/login');
+    });
   };
 
   return (
@@ -61,53 +65,73 @@ export default function SignUp() {
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-          <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="Username"
-              label="Username"
-              name="Username"
-              autoComplete="Username"
-              autoFocus
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="Email"
-              label="Email"
-              name="Email"
-              autoComplete="Email"
-              autoFocus
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="Password"
-              label="Password"
-              type="Password"
-              id="Password"
-              autoComplete="current-password"
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Sign Up
-            </Button>
-            <Grid container>
-              <Grid item>
-                <Link href="/auth/login" variant="body2">
-                  {"Already have an account? Sign in"}
-                </Link>
-              </Grid>
-            </Grid>
-          </Box>
+          <Formik
+            initialValues={{
+              name: '',
+              email: '',
+              password: '',
+            }}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit}
+          >
+            {(formik) => (
+              <Form noValidate>
+                <Field
+                  as={TextField}
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="name"
+                  label="Name"
+                  name="name"
+                  autoComplete="name"
+                  autoFocus
+                  error={formik.touched.name && formik.errors.name}
+                  helperText={formik.touched.name && formik.errors.name}
+                />
+                <Field
+                  as={TextField}
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email"
+                  name="email"
+                  autoComplete="email"
+                  error={formik.touched.email && formik.errors.email}
+                  helperText={formik.touched.email && formik.errors.email}
+                />
+                <Field
+                  as={TextField}
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  autoComplete="current-password"
+                  error={formik.touched.password && formik.errors.password}
+                  helperText={formik.touched.password && formik.errors.password}
+                />
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                >
+                  Sign Up
+                </Button>
+                <Grid container>
+                  <Grid item>
+                    <Link href="/auth/login" variant="body2">
+                      {"Already have an account? Sign in"}
+                    </Link>
+                  </Grid>
+                </Grid>
+              </Form>
+            )}
+          </Formik>
         </Box>
       </Container>
     </ThemeProvider>
