@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { CreateUserDto } from "../types/types";
+import { CreateUserDto, RegisterUserDto } from "../types/types";
 
 type User = {
     id: string,
@@ -20,3 +20,12 @@ export const loginUser = createAsyncThunk<User, CreateUserDto>('loginUser', asyn
         return rejectWithValue('SignIn failed')
     }
 });
+
+export const registerUser = createAsyncThunk<User, RegisterUserDto>('registerUser', async (data, {rejectWithValue}) => {
+    try {
+        const response = await axios.post('http://localhost:3001/auth/register', data);
+        return response.data;
+    } catch(error) {
+        return rejectWithValue('SignUp failed');
+    }
+})

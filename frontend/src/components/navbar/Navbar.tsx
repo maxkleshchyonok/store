@@ -6,6 +6,12 @@ import { useNavigate } from 'react-router-dom';
 
 export const Navbar = () => {
     const navigate = useNavigate()
+
+    const logout = () => {
+        sessionStorage.removeItem('access_token');
+        return navigate('/')
+    }
+
     return (
         <AppBar position="static" sx={{background: 'rgb(194, 241, 106)'}}>
             <Toolbar sx={{ justifyContent: 'space-between' }}>
@@ -14,7 +20,7 @@ export const Navbar = () => {
                     <IconButton onClick={() => navigate('/cart') } sx={{color: 'purple'}} color="inherit">
                         <ShoppingCart />
                     </IconButton>
-                    <IconButton sx={{color: 'purple'}} color="inherit">
+                    <IconButton onClick={logout} sx={{color: 'purple'}} color="inherit">
                         <Logout />
                     </IconButton>
                 </Toolbar>

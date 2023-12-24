@@ -3,8 +3,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -12,18 +10,37 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { RootState } from '../../store';
+import { RegisterUserDto } from '../auth/types/types';
+import { registerUser } from '../auth/store/auth.actions';
 
-// TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-export default function SignIn() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+export default function SignUp() {
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  
+  const { user, isAuthenticated, loading, error } = useSelector(
+    (state: RootState) => state.auth
+  );
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+
+    const registerData: RegisterUserDto = {
+      name: data.get('Username') as string,
+      email: data.get('Email') as string,
+      password: data.get('Password') as string,
+    }
+
+    await dispatch<any>(registerUser(registerData)).then(() => {
+      navigate('/auth/login')
+    })
+
   };
 
   return (
@@ -52,32 +69,28 @@ export default function SignIn() {
               id="Username"
               label="Username"
               name="Username"
-              autoComplete="Usernamename"
+              autoComplete="Username"
               autoFocus
             />
             <TextField
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
+              id="Email"
+              label="Email"
+              name="Email"
+              autoComplete="Email"
               autoFocus
             />
             <TextField
               margin="normal"
               required
               fullWidth
-              name="password"
+              name="Password"
               label="Password"
-              type="password"
-              id="password"
+              type="Password"
+              id="Password"
               autoComplete="current-password"
-            />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
             />
             <Button
               type="submit"
@@ -85,14 +98,9 @@ export default function SignIn() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              Sign Up
             </Button>
             <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
               <Grid item>
                 <Link href="/auth/login" variant="body2">
                   {"Already have an account? Sign in"}
