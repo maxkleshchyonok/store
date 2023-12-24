@@ -30,6 +30,7 @@ export type CartPageItem = {
     images: string[];
     quantity: number;
     price: number;
+    amount: number
 }
 
 export type OrderFromResponse = {

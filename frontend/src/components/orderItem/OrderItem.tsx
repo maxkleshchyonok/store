@@ -8,7 +8,7 @@ import Typography from '@mui/joy/Typography';
 import BookmarkAdd from '@mui/icons-material/BookmarkAddOutlined';
 import { CartPageItem } from '../../app/cart/types/types';
 
-export default function OrderItemComponent ({name, description, images, quantity, price}: CartPageItem) {
+export default function OrderItemComponent({ name, description, images, quantity, price, amount }: CartPageItem) {
   return (
     <Card sx={{ width: 320, margin: '0 3% 3% 0' }}>
       <div>
@@ -24,13 +24,13 @@ export default function OrderItemComponent ({name, description, images, quantity
       </AspectRatio>
       <CardContent orientation="horizontal">
         <div>
+          <Typography level="body-xs">In stock: {amount}</Typography>
           <Typography level="body-xs">Price:</Typography>
           <Typography fontSize="lg" fontWeight="lg">
             {price}
           </Typography>
-          <Typography level="body-xs">Amount:</Typography>
           <Typography fontSize="lg" fontWeight="lg">
-            {quantity}
+            Quantity: {quantity}
           </Typography>
         </div>
       </CardContent>

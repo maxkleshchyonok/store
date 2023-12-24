@@ -46,6 +46,7 @@ const Main = () => {
             price={product.price}
             description={product.description}
             imageUrl={product.images[0]}
+            amount={product.amount}
           />
         ))}
       </div>

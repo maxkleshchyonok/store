@@ -15,15 +15,15 @@ export class ProductRepo {
     }
 
     async findAll() {
-        return this.prisma.product.findMany();
+        return await this.prisma.product.findMany();
     }
 
     async findOne(id: number) {
-        return this.prisma.product.findUnique({ where: { id } });
+        return await this.prisma.product.findUnique({ where: { id } });
     }
 
     async update(id: number, amount: number) {
-        return this.prisma.product.update({
+        return await this.prisma.product.update({
             where: { id },
             data: {
                 amount: amount
@@ -32,6 +32,6 @@ export class ProductRepo {
     }
 
     async remove(id: number) {
-        return this.prisma.product.delete({ where: { id } });
+        return await this.prisma.product.delete({ where: { id } });
     }
 }

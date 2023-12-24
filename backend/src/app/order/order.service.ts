@@ -72,13 +72,22 @@ export class OrderService {
       this.orderItemRepo.update(itemId, updateItem);
     }
 
-    //this.productRepo.update(updateItem.productId, (dbItem.amount - updateItem.quantity));
-
     return 'Order updated!'
   }
 
   async updateStatus(id: number) {
     const statusCompleted = OrderStatus.COMPLETED;
+    const orderItems = await this.orderItemRepo.findByOrder(id);
+
+    orderItems.map(async (item) => {
+      const product = await this.productRepo.findOne(item.productId);
+      const isOk = this.checkAmountAndPrice(item.quantity, item.price, product);
+      if (!isOk) {
+        return new InternalServerErrorException('Incorrect amount or price.')
+      }
+      this.productRepo.update(item.productId, (product.amount - item.quantity));
+    });
+
     return await this.orderRepo.updateOrderById(id, statusCompleted);
   }
 
@@ -108,10 +117,12 @@ export class OrderService {
 
   checkAmountAndPrice(quantity: number, price: number, item: Product) {
     if (quantity > item.amount) {
-      throw new InternalServerErrorException('Incorrect items amount! Check your order.')
+      //throw new InternalServerErrorException('Incorrect items amount! Check your order.');
+      return false;
     }
     if (price / quantity !== item.price) {
-      throw new InternalServerErrorException('Incorret price! Check your order.')
+      //throw new InternalServerErrorException('Incorret price! Check your order.')
+      return false;
     }
     return true;
   }

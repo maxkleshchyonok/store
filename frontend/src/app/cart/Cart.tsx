@@ -35,7 +35,8 @@ export const CartPage = () => {
               description: orderProduct.payload.description,
               images: orderProduct.payload.images,
               quantity: item.quantity,
-              price: item.price
+              price: item.price,
+              amount: orderProduct.payload.amount,
             };
             orderItems.push(cartItem);
           })
@@ -74,6 +75,7 @@ export const CartPage = () => {
               images={el.images}
               quantity={el.quantity}
               price={el.price}
+              amount={el.amount}
             />
           )
         })}
@@ -87,6 +89,11 @@ export const CartPage = () => {
         >
           Confirm order
         </Button>
+      )}
+      {products.length == 0 && (
+        <Typography variant="h4" component="h4" sx={{paddingLeft: '4%'}}>
+          No items yet.
+        </Typography>
       )}
     </div>
   )

@@ -7,7 +7,7 @@ import { CartItem } from '../cart/types/types';
 import { createOrder } from '../cart/store/cart.actions';
 
 
-const ProductCard: React.FC<ProductCardProps> = ({ productId, imageUrl, description, price, name }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ productId, imageUrl, description, price, name, amount }) => {
 
   const dispatch = useDispatch();
   const { cart, loading, error } = useSelector(
@@ -49,9 +49,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ productId, imageUrl, descript
         <Typography variant="body2" color="text.secondary">
           {description}
         </Typography>
-        <Typography>
-          {price}
-        </Typography>
+        <div>
+          <Typography>
+            {price}
+          </Typography>
+          <Typography>
+            In stock: {amount}
+          </Typography>
+        </div>
       </CardContent>
       <CardActions>
         <TextField

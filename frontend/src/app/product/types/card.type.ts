@@ -4,4 +4,5 @@ export interface ProductCardProps {
     price: number;
     description: string;
     imageUrl: string;
+    amount: number;
   }
