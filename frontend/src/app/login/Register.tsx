@@ -20,7 +20,6 @@ import { registerUser } from '../auth/store/auth.actions';
 
 const defaultTheme = createTheme();
 
-// Define the validation schema
 const validationSchema = Yup.object().shape({
   username: Yup.string().required('Username is required'),
   email: Yup.string().email('Invalid email').required('Email is required'),

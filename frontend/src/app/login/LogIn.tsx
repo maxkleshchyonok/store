@@ -1,4 +1,6 @@
-import * as React from 'react';
+import React from 'react';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -18,27 +20,27 @@ import { useNavigate } from 'react-router-dom';
 
 const defaultTheme = createTheme();
 
-export default function SignIn() {
+const validationSchema = Yup.object().shape({
+  email: Yup.string().email('Invalid email').required('Email is required'),
+  password: Yup.string().required('Password is required'),
+});
 
+export default function SignIn() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user, isAuthenticated, loading, error } = useSelector(
     (state: RootState) => state.auth
   );
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-
+  const handleSubmit = async (values: { email: string, password: string }) => {
     const loginData: CreateUserDto = {
-      username: data.get('email') as string,
-      password: data.get('password') as string,
-    }
+      username: values.email,
+      password: values.password,
+    };
 
     await dispatch<any>(loginUser(loginData)).then(() => {
-      navigate('/cart')
+      navigate('/cart');
     });
-
   };
 
   return (
@@ -59,43 +61,60 @@ export default function SignIn() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="email"
-              name="email"
-              autoComplete="email"
-              autoFocus
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Sign In
-            </Button>
-            <Grid container>
-              <Grid item>
-                <Link href="/auth/register" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
-            </Grid>
-          </Box>
+          <Formik
+            initialValues={{
+              email: '',
+              password: '',
+            }}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit}
+          >
+            {(formik) => (
+              <Form noValidate onSubmit={formik.handleSubmit}>
+                <Field
+                  as={TextField}
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email"
+                  name="email"
+                  autoComplete="email"
+                  autoFocus
+                  error={formik.touched.email && formik.errors.email}
+                  helperText={formik.touched.email && formik.errors.email}
+                />
+                <Field
+                  as={TextField}
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  autoComplete="current-password"
+                  error={formik.touched.password && formik.errors.password}
+                  helperText={formik.touched.password && formik.errors.password}
+                />
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                >
+                  Sign In
+                </Button>
+                <Grid container>
+                  <Grid item>
+                    <Link href="/auth/register" variant="body2">
+                      {"Don't have an account? Sign Up"}
+                    </Link>
+                  </Grid>
+                </Grid>
+              </Form>
+            )}
+          </Formik>
         </Box>
       </Container>
     </ThemeProvider>
