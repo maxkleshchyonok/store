@@ -25,7 +25,7 @@ import { UserRepo } from 'src/domain/repos/user.repo';
     PrismaModule,
     JwtModule.register({
       secret: `${process.env.jwt_secret}`,
-      signOptions: { expiresIn: '1d' }
+      signOptions: { expiresIn: '5m' }
     })],
 })
 export class AuthModule { }

@@ -16,34 +16,6 @@ interface CustomRequest extends Request {
 export class UserRepo {
     constructor(private prisma: PrismaService) { }
 
-    // async getMyUser(id: string, req: CustomRequest) {
-    //     const user = await this.prisma.user.findUnique({
-    //         where: { id },
-    //         include: {
-    //             orders: {
-    //                 include: {
-    //                     items: true
-    //                 }
-    //             }
-    //         }
-    //     },
-    //     );
-
-    //     if (!user) {
-    //         throw new NotFoundException();
-    //     }
-
-    //     const decodedUser = req.user as { id: string, email: string };
-
-    //     if (user.id !== decodedUser.id) {
-    //         throw new ForbiddenException();
-    //     }
-
-    //     delete user.hashedPassword;
-
-    //     return { user };
-    // }
-
     async getMyUser(id: string) {
         const user = await this.prisma.user.findUnique({
             where: { id },
@@ -88,6 +60,5 @@ export class UserRepo {
         const saltOrRounds = 6;
         return await bcrypt.hash(password, saltOrRounds);
     }
-
 
 }

@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { OrderItemService } from './order-item.service';
 import { OrderItemForm } from './domain/order-item.form';
 import { UpdateOrderItemForm } from './domain/update-order-item.form';
+import { JwtGuard } from 'src/libs/security/guards/jwt-auth.guard';
 
 @Controller('order-item')
 export class OrderItemController {

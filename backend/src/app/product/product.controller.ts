@@ -16,7 +16,7 @@ export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Post()
-  @Roles(Role.USER)
+  @Roles(Role.ADMIN)
   create(@Body() product: CreateProductForm) {
     return this.productService.create(product);
   }
@@ -39,7 +39,7 @@ export class ProductController {
   }
 
   @Delete(':id')
-  @Roles(Role.USER)
+  @Roles(Role.ADMIN)
   remove(@Param('id') id: string) {
     return this.productService.remove(+id);
   }

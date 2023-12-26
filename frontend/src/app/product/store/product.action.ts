@@ -1,9 +1,9 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import repository from "../../../repository";
 
 export const getProduct = createAsyncThunk('getProduct', async (_, { rejectWithValue }) => {
     try {
-        const response = await axios.get('http://localhost:3001/product');
+        const response = await repository.get('/product');
         return response.data;
     } catch (error) {
         return rejectWithValue('Loading products failed');

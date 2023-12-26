@@ -6,6 +6,7 @@ import { PrismaService } from 'src/libs/prisma/prisma.service';
 import { OrderItemRepo } from 'src/domain/repos/order-item.repo';
 import { UserRepo } from 'src/domain/repos/user.repo';
 import { ProductRepo } from 'src/domain/repos/product.repo';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   controllers: [OrderController],
@@ -17,5 +18,11 @@ import { ProductRepo } from 'src/domain/repos/product.repo';
     UserRepo,
     ProductRepo,
   ],
+  imports: [
+    JwtModule.register({
+      secret: `${process.env.jwt_secret}`,
+      signOptions: { expiresIn: '5m' }
+    })
+  ]
 })
 export class OrderModule { }
