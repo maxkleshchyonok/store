@@ -31,16 +31,16 @@ repository.interceptors.response.use(
                 );
 
                 if (!token) {
-                    localStorage.removeItem('refresh-token');
+                    localStorage.removeItem('refresh_token');
                     return;
                 }
 
-                sessionStorage.setItem('access-token', token.data.accessToken);
+                sessionStorage.setItem('access_token', token.data.accessToken);
 
                 return repository(originalRequest);
             } catch (error) {
-                sessionStorage.removeItem('access-token');
-                localStorage.removeItem('refresh-token');
+                sessionStorage.removeItem('access_token');
+                localStorage.removeItem('refresh_token');
                 return Promise.reject(error);
             }
         }
